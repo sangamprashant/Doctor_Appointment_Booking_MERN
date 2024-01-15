@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
+.before-login {
+  background: linear-gradient(to right, #f2fcff, #ffdde2, #d1ddff);
+}
+/* nav bar */
+nav {
+  height: 65px;
+  display: flex;
+  align-items: center;
+  z-index: 100;
+  background: linear-gradient(to right, #f2fcff, #ffdde2, #d1ddff);
+}
+.container-fluid {
+  background: linear-gradient(to right, #f2fcff, #ffdde2, #d1ddff);
+}
+.container-fulid {
+  padding-top: 65px;
+}
+
+.service-paper {
+  padding: 10px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background-color: rgba(110, 110, 110, 0.8);
+}
+
+.bg_light {
+  background-color: #4848481d;
+}
