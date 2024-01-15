@@ -14,18 +14,21 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if(!name.trim()  || !email.trim() || !password.trim()){
-      return toast.info("All fields are required")
+    if (!name.trim() || !email.trim() || !password.trim()) {
+      return toast.info("All fields are required");
     }
 
     const reqBody = {
-      name:name.trim(),
-      email:email.trim(),
-      password:password.trim(),
+      name: name.trim(),
+      email: email.trim(),
+      password: password.trim(),
     };
 
     try {
-      const response = await axios.post(import.meta.env.VITE_BACKEND_API + "/api/user/register", reqBody);
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/api/user/register`,
+        reqBody
+      );
 
       if (response.data.success) {
         // success
