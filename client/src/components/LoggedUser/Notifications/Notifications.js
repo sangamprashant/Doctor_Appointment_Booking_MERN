@@ -41,7 +41,7 @@ function Notifications() {
               {user?.notifcation.map((data, index) => (
                 <div
                   className="card p-2"
-                  onClick={() => navigate(data.data.onClickPath)}
+                  onClick={() => navigate(data.onClickPath)}
                   key={index}
                 >
                   <div className="card-text">{data.message}</div>
@@ -62,7 +62,7 @@ function Notifications() {
               {user?.seennotification.map((data, index) => (
                 <div
                   className="card p-2"
-                  onClick={() => navigate(data.data.onClickPath)}
+                  onClick={() => navigate(data.onClickPath)}
                   key={index}
                 >
                   <div className="card-text">{data.message}</div>

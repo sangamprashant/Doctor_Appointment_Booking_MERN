@@ -1,0 +1,6 @@
+.table-head > tr > td{
+    background-color: #ececec; /* Dark background color for the table header */
+    color: #000000; /* Text color for the table header */
+    padding: 10px; /* Padding for the table header cells */
+    font-weight: 700;
+  }

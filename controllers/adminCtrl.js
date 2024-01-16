@@ -36,7 +36,6 @@ const getAllDoctorsController = async (req, res) => {
     });
   }
 };
-
 // doctor account status
 const changeAccountStatusController = async (req, res) => {
   try {

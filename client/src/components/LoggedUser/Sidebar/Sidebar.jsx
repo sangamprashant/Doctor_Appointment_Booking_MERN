@@ -2,8 +2,6 @@
 import React, { useContext, useState } from "react";
 import "./Sidebar.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import MenuIcon from "@mui/icons-material/Menu";
 import HomeIcon from "@mui/icons-material/Home";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import AssignmentIndIcon from "@mui/icons-material/AssignmentInd";
@@ -45,12 +43,12 @@ const adminMenu = [
   },
   {
     label: "Users",
-    path: "/users",
+    path: "/admin/users",
     icon: <Groups2Icon />,
   },
   {
     label: "Doctors",
-    path: "/doctors",
+    path: "/admin/doctors",
     icon: <AssignmentIndIcon />,
   },
   {
@@ -80,10 +78,6 @@ function Sidebar({ children }) {
   }
 };
 
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
   return (
     <div className={`d-flex`}>
       <div
@@ -91,10 +85,8 @@ function Sidebar({ children }) {
           isSidebarOpen ? "sidebar-open" : "small"
         }`}
       >
-        <div className="d-flex justify-content-end">
-          <Button onClick={toggleSidebar} className="toggle-btn">
-            <MenuIcon />
-          </Button>
+        <div className="d-flex justify-content-start text-dark">
+          LOGO
         </div>
         <div className="d-flex justify-content-center flex-column gap-5">
           {menuRender.map((item, index) => (
@@ -116,8 +108,8 @@ function Sidebar({ children }) {
         </div>
       </div>
       <div className={`main-content p-3 w-100 ${isSidebarOpen ? "" : ""}`}>
-        <Topbar user={user} />
-        <div className="card p-3 mt-3">{children}</div>
+        <Topbar user={user} isSidebarOpen={isSidebarOpen}  setIsSidebarOpen={setIsSidebarOpen}/>
+        <div className="card p-3 mt-3 h-100">{children}</div>
       </div>
     </div>
   );

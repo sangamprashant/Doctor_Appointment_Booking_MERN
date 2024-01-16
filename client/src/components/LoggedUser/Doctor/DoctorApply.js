@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Col, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
+import "./DoctorApply.css"
 import { AppContext } from "../../../AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -34,9 +35,26 @@ function DoctorApply() {
     }));
   };
 
+  const isFormValid = () => {
+    return (
+      formData.firstName &&
+      formData.lastName &&
+      formData.phone &&
+      formData.website &&
+      formData.address &&
+      formData.specialization &&
+      formData.experience &&
+      formData.feesPerCunsaltation &&
+      formData.timings.length > 0
+    );
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission with formData
+    if (!isFormValid()) {
+      toast.info("Please fill in all fields.");
+      return;
+    }
     console.log(formData);
     try {
       const response = await axios.post(
@@ -69,7 +87,7 @@ function DoctorApply() {
     <div>
       <h1>Apply Doctor</h1>
       <hr />
-      <h3>Personal Information</h3>
+      <h3 className="apply-sub-title">Personal Information</h3>
       <form onSubmit={handleSubmit}>
         <div className="row">
           <div className="col-md-4">
@@ -134,7 +152,7 @@ function DoctorApply() {
           </div>
         </div>
         <hr />
-        <h3>Professional Information</h3>
+        <h3 className="apply-sub-title">Professional Information</h3>
 
         <div className="row">
           <div className="col-md-4">
@@ -182,6 +200,7 @@ function DoctorApply() {
             <TimePicker.RangePicker
               className="w-100"
               onChange={handleTimingChange}
+              format='HH:mm'
             />
           </div>
         </div>

@@ -50,7 +50,7 @@ router.post("/book-appointment", authMiddleware, bookeAppointmnetController);
 
 //Booking Avliability
 router.post(
-  "/booking-availbility",
+  "/booking-availability",
   authMiddleware,
   bookingAvailabilityController
 );

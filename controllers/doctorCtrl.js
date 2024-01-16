@@ -1,6 +1,7 @@
 const appointmentModel = require("../models/appointmentModel");
 const doctorModel = require("../models/doctorModel");
 const userModel = require("../models/userModels");
+
 const getDoctorInfoController = async (req, res) => {
   try {
     const doctor = await doctorModel.findOne({ userId: req.body.userId });
@@ -93,7 +94,7 @@ const updateStatusController = async (req, res) => {
     notifcation.push({
       type: "status-updated",
       message: `your appointment has been updated ${status}`,
-      onCLickPath: "/doctor-appointments",
+      onClickPath: "/doctor-appointments",
     });
     await user.save();
     res.status(200).send({

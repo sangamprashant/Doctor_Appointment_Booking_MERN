@@ -82,6 +82,15 @@ const authController = async (req, res) => {
 // APpply DOctor CTRL
 const applyDoctorController = async (req, res) => {
   try {
+    const existingDoctor = await doctorModel.findOne({
+      userId: req.body.userId,
+    });
+    if (existingDoctor) {
+      return res.status(200).send({
+        success: false,
+        message: "Doctor Account already applied by this user",
+      });
+    }
     const newDoctor = await doctorModel({ ...req.body, status: "pending" });
     await newDoctor.save();
     const adminUser = await userModel.findOne({ isAdmin: true });
@@ -89,23 +98,21 @@ const applyDoctorController = async (req, res) => {
     notifcation.push({
       type: "apply-doctor-request",
       message: `${newDoctor.firstName} ${newDoctor.lastName} Has Applied For A Doctor Account`,
-      data: {
-        doctorId: newDoctor._id,
-        name: newDoctor.firstName + " " + newDoctor.lastName,
-        onClickPath: "/admin/docotrs",
-      },
+      doctorId: newDoctor._id,
+      name: newDoctor.firstName + " " + newDoctor.lastName,
+      onClickPath: "/admin/doctors",
     });
     await userModel.findByIdAndUpdate(adminUser._id, { notifcation });
     res.status(201).send({
       success: true,
-      message: "Doctor Account Applied SUccessfully",
+      message: "Doctor Account Applied Successfully",
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error WHile Applying For Doctotr",
+      message: "Error While Applying For Doctor",
     });
   }
 };
@@ -187,8 +194,8 @@ const bookeAppointmnetController = async (req, res) => {
     const user = await userModel.findOne({ _id: req.body.doctorInfo.userId });
     user.notifcation.push({
       type: "New-appointment-request",
-      message: `A nEw Appointment Request from ${req.body.userInfo.name}`,
-      onCLickPath: "/user/appointments",
+      message: `A new Appointment Request from ${req.body.userInfo.name}`,
+      onClickPath: "/user/appointments",
     });
     await user.save();
     res.status(200).send({
@@ -208,13 +215,14 @@ const bookeAppointmnetController = async (req, res) => {
 // booking bookingAvailabilityController
 const bookingAvailabilityController = async (req, res) => {
   try {
-    const date = moment(req.body.date, "DD-MM-YY").toISOString();
+    const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
     const fromTime = moment(req.body.time, "HH:mm")
       .subtract(1, "hours")
       .toISOString();
     const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
     const doctorId = req.body.doctorId;
-    const appointments = await appointmentModel.find({
+    // Check for existing appointments within the one-hour gap for the entire date
+    const existingAppointments = await appointmentModel.find({
       doctorId,
       date,
       time: {
@@ -222,15 +230,19 @@ const bookingAvailabilityController = async (req, res) => {
         $lte: toTime,
       },
     });
-    if (appointments.length > 0) {
+
+    if (existingAppointments.length > 0) {
       return res.status(200).send({
-        message: "Appointments not Availibale at this time",
+        message:
+          "Appointments not available within the one-hour gap on this date",
         success: true,
+        available: false,
       });
     } else {
       return res.status(200).send({
+        message: "Appointments available within the one-hour gap on this date",
         success: true,
-        message: "Appointments available",
+        available: true,
       });
     }
   } catch (error) {

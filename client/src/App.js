@@ -1,6 +1,10 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import {
+  AdminDoctors,
+  AdminUsers,
+  Appointments,
+  BookAppointment,
   DoctorApply,
   Footer,
   Home,
@@ -55,6 +59,11 @@ function App() {
             <Route path="/" element={<LoggedHome />} />
             <Route path="/apply-doctor" element={<DoctorApply />} />
             <Route path="/notifications" element={<Notifications />} />
+            <Route path="/appointments" element={<Appointments />} />
+            <Route path="/book-appointment/:id" element={<BookAppointment />} />
+
+            <Route path="/admin/doctors" element={<AdminDoctors />} />
+            <Route path="/admin/users" element={<AdminUsers />} />
           </Routes>
         </Sidebar>
       )}

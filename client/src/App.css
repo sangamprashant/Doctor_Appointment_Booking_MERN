@@ -11,6 +11,15 @@ a {
   text-decoration: none;
 }
 
+p{
+  padding: 0;
+  margin: 0;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
 .before-login {
   background: linear-gradient(to right, #f2fcff, #ffdde2, #d1ddff);
 }
