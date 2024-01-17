@@ -6,6 +6,7 @@ const port = process.env.PORT || 5000;
 
 // Use cors middleware
 app.use(cors());
+const path = require("path");
 
 // Parse JSON requests
 app.use(express.json());
@@ -33,8 +34,17 @@ mongoose.connection.on("error", (err) => {
   console.error(`Failed to connect to MongoDB: ${err}`);
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello, this is your Express server!');
+// Serve the frontend
+app.use(express.static(path.join(__dirname, "client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.join(__dirname, "client/build/index.html"),
+    function (err) {
+      if (err) {
+        res.status(500).send(err);
+      }
+    }
+  );
 });
 
 // Start the server
