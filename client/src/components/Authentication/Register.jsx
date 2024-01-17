@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../../AppContext";
 
 function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { setIsLoading } = useContext(AppContext);
 
   // console.log(process.env.VITE_BACKEND_API)
 
@@ -25,6 +27,7 @@ function Register() {
     };
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/user/register`,
         reqBody
@@ -40,6 +43,8 @@ function Register() {
     } catch (error) {
       console.error("Registration failed:", error.response.data);
       toast.error("Something went wrong.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -47,14 +52,20 @@ function Register() {
     <div className="container col-xl-10 col-xxl-8 px-4 py-5">
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-7 text-center text-lg-start">
-          <h1 className="display-4 fw-bold lh-1 mb-3">
-            Welcome to BOOTSTRAPFINDS
-          </h1>
+          <h1 className="display-4 fw-bold lh-1 mb-3">Welcome to HealthConnect</h1>
           <p className="col-lg-10 fs-4">
-            Discover a wide range of pre-made Bootstrap components and code
-            snippets at BOOTSTRAPFINDS. Streamline your web development with our
-            collection of ready-to-use, responsive design elements.
+            Your one-stop platform for managing health appointments and
+            services. Explore a variety of features, from booking appointments
+            as a user to registering and applying as a doctor to serve your
+            community.
           </p>
+          <h2 className="fw-bold mt-3">Why Choose HealthConnect?</h2>
+          <ol className="">
+            <li>Effortless appointment booking as a user</li>
+            <li>Registration to access a range of health services</li>
+            <li>Apply as a doctor to contribute to community health</li>
+            {/* Add more points as needed */}
+          </ol>
         </div>
         <div className="col-md-10 mx-auto col-lg-5">
           <form

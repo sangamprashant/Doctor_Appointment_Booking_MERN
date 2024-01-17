@@ -7,9 +7,9 @@ import { AppContext } from "../../AppContext";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { token, setToken, isLogged, setIsLogged } = useContext(AppContext)
+  const { setToken, setIsLogged, setIsLoading } = useContext(AppContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,18 +24,19 @@ function Login() {
     };
 
     try {
+      setIsLoading(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/user/login`,
         reqBody
       );
       if (response.data.success) {
         toast.success(response.data.message);
-        console.log(response.data)
+        console.log(response.data);
         sessionStorage.setItem("token", response.data.token);
-        setToken(response.data.token)
-        setIsLogged(true)
-        setEmail("")
-        setPassword("")
+        setToken(response.data.token);
+        setIsLogged(true);
+        setEmail("");
+        setPassword("");
         navigate("/");
       } else {
         toast.info(response.data.message);
@@ -43,6 +44,8 @@ function Login() {
     } catch (error) {
       console.error("Login failed:", error.response.data);
       toast.error("Something went wrong.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -50,13 +53,12 @@ function Login() {
     <div className="container col-xl-10 col-xxl-8 px-4 py-5">
       <div className="row align-items-center g-lg-5 py-5">
         <div className="col-lg-7 text-center text-lg-start">
-          <h1 className="display-4 fw-bold lh-1 mb-3">
-            Welcome to BOOTSTRAPFINDS
-          </h1>
+          <h1 className="display-4 fw-bold lh-1 mb-3">Welcome Back</h1>
           <p className="col-lg-10 fs-4">
-            Discover a wide range of pre-made Bootstrap components and code
-            snippets at BOOTSTRAPFINDS. Streamline your web development with our
-            collection of ready-to-use, responsive design elements.
+            Your one-stop platform for managing health appointments and
+            services. Explore a variety of features, from booking appointments
+            as a user to registering and applying as a doctor to serve your
+            community.
           </p>
         </div>
         <div className="col-md-10 mx-auto col-lg-5">

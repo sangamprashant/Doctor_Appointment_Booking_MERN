@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 function LoggedHome() {
   const [approvedDoctors, setApprovedDoctors] = useState([]);
-  const { token } = useContext(AppContext);
+  const { token ,setIsLoading} = useContext(AppContext);
   const navigate  =  useNavigate()
 
   useEffect(() => {
@@ -17,6 +17,7 @@ function LoggedHome() {
 
   const fetchDoctors = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/user/getAllDoctors`,
         {
@@ -28,6 +29,8 @@ function LoggedHome() {
       setApprovedDoctors(response.data.data);
     } catch (error) {
       console.error("Error fetching doctors:", error);
+    } finally{
+      setIsLoading(false)
     }
   };
 
@@ -45,7 +48,7 @@ function LoggedHome() {
 
   return (
     <div className="row">
-      {approvedDoctors.map((doctor, index) => (
+      {approvedDoctors?.map((doctor, index) => (
         <div className="col-md-4 p-3 " key={doctor._id}>
           <div className="card p-3 cursor-pointer " onClick={()=>handleDoctorClick(doctor)}>
             <h3>
@@ -57,7 +60,7 @@ function LoggedHome() {
             <p>Fees: ₹{doctor.feesPerCunsaltation}</p>
             <p>
               Timings:{" "}
-              {doctor.timings.map((time) => convertToHHMM(time)).join(", ")}
+              {doctor?.timings?.map((time) => convertToHHMM(time)).join(", ")}
             </p>
           </div>
         </div>

@@ -10,6 +10,7 @@ import {
   DoctorUpdate,
   Footer,
   Home,
+  LoadingContainer,
   LoggedHome,
   Login,
   Navbar,
@@ -25,8 +26,16 @@ function App() {
   const [token, setToken] = useState(sessionStorage.getItem("token"));
   const [isLogged, setIsLogged] = useState(token ? true : false);
   const [user, setUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  // todo protect the path, old-date booking, check the timing range, /profile is not present
 
-  console.log(isLogged);
+  useEffect(() => {
+    if (!user) {
+      setIsLoading(true);
+    } else {
+      setIsLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,12 +46,21 @@ function App() {
     };
 
     fetchData();
-  }, [token, isLogged]);
+
+    if (token) {
+      document.title = user?.isAdmin
+        ? "Health-Connect | Admin"
+        : user?.isDoctor
+        ? "Health-Connect | Doctor"
+        : "Health-Connect | User";
+    } else {
+      document.title = "Health-Connect";
+    }
+  }, [token, isLogged, user]);
 
   return (
     <AppContext.Provider
-      value={{ token, setToken, isLogged, setIsLogged, user, setUser }}
-    >
+      value={{ token, setToken, isLogged, setIsLogged, user, setUser, setIsLoading,}}>
       {!isLogged ? (
         <>
           <Navbar />
@@ -57,6 +75,7 @@ function App() {
         </>
       ) : (
         <Sidebar>
+          <LoadingContainer isLoading={isLoading} />
           <Routes>
             {/* common */}
             <Route path="/" element={<LoggedHome />} />

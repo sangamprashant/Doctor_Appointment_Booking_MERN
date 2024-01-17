@@ -5,7 +5,7 @@ import axios from "axios";
 import { AppContext } from "../../../AppContext";
 
 function DoctorUpdate() {
-  const { token, user } = useContext(AppContext);
+  const { token, user, setIsLoading } = useContext(AppContext);
   const { id } = useParams();
   const [DoctorData, setDoctorData] = useState(null);
 
@@ -17,6 +17,7 @@ function DoctorUpdate() {
 
   const fetchDoctor = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/doctor/getDoctorInfo`,
         { userId: user?._id },
@@ -29,6 +30,8 @@ function DoctorUpdate() {
       setDoctorData(response.data.data);
     } catch (error) {
       console.log("Failed to fetch the doctor data");
+    } finally {
+      setIsLoading(false);
     }
   };
 

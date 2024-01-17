@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "../../../AppContext";
 import axios from "axios";
-import  "./Admin.css"
+import "./Admin.css";
 
 function AdminUsers() {
-  const { token } = useContext(AppContext);
+  const { token, setIsLoading } = useContext(AppContext);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -13,6 +13,7 @@ function AdminUsers() {
 
   const fetchDoctors = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/admin/getAllUsers`,
         {
@@ -21,13 +22,13 @@ function AdminUsers() {
           },
         }
       );
-      setUsers(response.data.data); 
+      setUsers(response.data.data);
     } catch (error) {
       console.error("Error fetching doctors:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
-
-  console.log(users)
 
   return (
     <div>
@@ -37,7 +38,6 @@ function AdminUsers() {
           <tr>
             <td>Name</td>
             <td>Email</td>
-
           </tr>
         </thead>
         <tbody>

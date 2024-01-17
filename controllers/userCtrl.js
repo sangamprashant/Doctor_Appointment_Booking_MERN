@@ -215,14 +215,21 @@ const bookeAppointmnetController = async (req, res) => {
 // booking bookingAvailabilityController
 const bookingAvailabilityController = async (req, res) => {
   try {
+    // Parse date and time from request body using moment
     const date = moment(req.body.date, "DD-MM-YYYY").toISOString();
-    const fromTime = moment(req.body.time, "HH:mm")
-      .subtract(1, "hours")
-      .toISOString();
+    const fromTime = moment(req.body.time, "HH:mm").subtract(1, "hours").toISOString();
     const toTime = moment(req.body.time, "HH:mm").add(1, "hours").toISOString();
+
     const doctorId = req.body.doctorId;
-    // Check for existing appointments within the one-hour gap for the entire date
-    const existingAppointments = await appointmentModel.find({
+
+    // Log the received data for debugging
+    // console.log("Request Data: ", req.body);
+    // console.log("Parsed Date: ", date);
+    // console.log("From Time: ", fromTime);
+    // console.log("To Time: ", toTime);
+
+    // Query the database to check for appointments within the specified range
+    const appointments = await appointmentModel.find({
       doctorId,
       date,
       time: {
@@ -231,26 +238,25 @@ const bookingAvailabilityController = async (req, res) => {
       },
     });
 
-    if (existingAppointments.length > 0) {
+    if (appointments.length > 0) {
       return res.status(200).send({
-        message:
-          "Appointments not available within the one-hour gap on this date",
-        success: true,
+        message: "Appointments not available at this time",
         available: false,
+        success: true,
       });
     } else {
       return res.status(200).send({
-        message: "Appointments available within the one-hour gap on this date",
-        success: true,
+        message: "Appointments available",
         available: true,
+        success: true,
       });
     }
   } catch (error) {
-    console.log(error);
+    console.error("Error in bookingAvailabilityController: ", error);
     res.status(500).send({
       success: false,
       error,
-      message: "Error In Booking",
+      message: "Error in checking availability",
     });
   }
 };

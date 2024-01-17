@@ -11,6 +11,7 @@ import Groups2Icon from "@mui/icons-material/Groups2";
 import Topbar from "../Topbar/Topbar";
 import { AppContext } from "../../../AppContext";
 import { toast } from "react-toastify";
+import { HomeIconW } from "../../../assets";
 
 function Sidebar({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -84,7 +85,7 @@ function Sidebar({ children }) {
         }`}
       >
         <div className="d-flex justify-content-start text-dark flex-column">
-          <h1>LOGO</h1>
+          <img src={HomeIconW} alt="icon" height={50} width={50} />
           <p>{user?.isAdmin ? "Admin" : user?.isDoctor ? "Doctor" : "User"}</p>
         </div>
         <div className="d-flex justify-content-center flex-column gap-5">
@@ -112,6 +113,7 @@ function Sidebar({ children }) {
           <Link
             className={`sidenav-item shadow rounded-3 border-3 inactive`}
             onClick={handelLogout}
+            to="/"
           >
             <ExitToAppIcon />
             {isSidebarOpen && "Logout"}

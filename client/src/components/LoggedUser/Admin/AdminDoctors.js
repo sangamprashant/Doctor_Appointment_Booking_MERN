@@ -4,7 +4,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 function AdminDoctors() {
-  const { token } = useContext(AppContext);
+  const { token, setIsLoading } = useContext(AppContext);
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
@@ -13,6 +13,7 @@ function AdminDoctors() {
 
   const fetchDoctors = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/admin/getAllDoctors`,
         {
@@ -24,6 +25,8 @@ function AdminDoctors() {
       setDoctors(response.data.data);
     } catch (error) {
       console.error("Error fetching doctors:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 

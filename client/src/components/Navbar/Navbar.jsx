@@ -25,7 +25,7 @@ function Navbar() {
     <nav className="navbar navbar-expand-lg bg-body-tertiary position-fixed w-100">
       <div className="container-fluid ">
         <Link className="navbar-brand " to="/">
-          <strong>Doctor Appointment</strong>
+          <strong>HealthConnect</strong>
         </Link>
         <button
           className="navbar-toggler"

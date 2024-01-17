@@ -2,6 +2,7 @@ import Login from "./Authentication/Login";
 import Register from "./Authentication/Register";
 import Footer from "./Footer/Footer";
 import Home from "./Home/Home";
+import LoadingContainer from "./LoadingContainer/LoadingContainer";
 import AdminDoctors from "./LoggedUser/Admin/AdminDoctors";
 import AdminUsers from "./LoggedUser/Admin/AdminUsers";
 import Appointments from "./LoggedUser/Appointment/Appointments";
@@ -30,4 +31,5 @@ export {
   DoctorAppointment,
   DoctorUpdate,
   BookAppointment,
+  LoadingContainer,
 };

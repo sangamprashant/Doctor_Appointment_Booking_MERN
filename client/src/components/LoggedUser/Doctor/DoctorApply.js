@@ -20,7 +20,7 @@ function DoctorApply({ DoctorData }) {
     feesPerCunsaltation: "",
     timings: [],
   });
-  const { token, setToken, isLogged, setIsLogged, user } =
+  const { token, setToken, isLogged, setIsLogged, user,setIsLoading } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -69,6 +69,7 @@ function DoctorApply({ DoctorData }) {
       : "/api/user/apply-doctor";
 
     try {
+    setIsLoading(true)
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}${api}`,
         { ...formData, userId: user._id, email: user.email },
@@ -87,6 +88,8 @@ function DoctorApply({ DoctorData }) {
     } catch (error) {
       console.log("Error while fetching the user data:", error);
       toast.error("Something went wrong");
+    } finally{
+      setIsLoading(false)
     }
   };
 

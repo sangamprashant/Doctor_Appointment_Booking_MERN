@@ -6,7 +6,7 @@ import { AppContext } from "../../../AppContext";
 
 function Appointments() {
   const [appointments, setAppointments] = useState([]);
-  const { token, setToken, isLogged, setIsLogged, user } =
+  const { token, setToken, isLogged, setIsLogged, user, setIsLoading } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -17,6 +17,7 @@ function Appointments() {
 
   const fetchAppointments = async () => {
     try {
+      setIsLoading(true);
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/user/user-appointments`,
         {
@@ -30,6 +31,8 @@ function Appointments() {
       setAppointments(response.data.data);
     } catch (error) {
       console.error("Failed to fetch the appointments", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,7 +55,7 @@ function Appointments() {
         key="dateTime"
         render={(text, record) => (
           <>
-            {moment(record.date).format("DD-MM-YYYY")}{" "}
+            {moment(record.date).format("DD-MM-YYYY")} &nbsp;
             {moment(record.time).format("HH:mm A")}
           </>
         )}

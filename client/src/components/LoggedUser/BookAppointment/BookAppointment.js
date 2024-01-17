@@ -5,12 +5,13 @@ import { DatePicker, TimePicker } from "antd";
 import { AppContext } from "../../../AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 function BookAppointment() {
   const location = useLocation();
   const { doctor } = location.state || {};
-  const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedTime, setSelectedTime] = useState(null);
+  const [selectedDate, setSelectedDate] = useState();
+  const [selectedTime, setSelectedTime] = useState();
   const { token, setToken, isLogged, setIsLogged, user } =
     useContext(AppContext);
   const [isAvailable, setIsAvailable] = useState(false);
@@ -44,15 +45,25 @@ function BookAppointment() {
       }
 
       const selectedDateTime = selectedTime.toDate();
-      const selectedTimeString = selectedTime.format("HH:mm A");
+      const selectedTimeString = selectedTime.format("HH:mm");
       const selectdDateString = selectedDate.format("DD-MM-YYYY");
       const doctorStartTiming = new Date(doctor.timings[0]);
       const doctorEndTiming = new Date(
         doctor.timings[doctor.timings.length - 1]
       );
       if (
-        selectedDateTime < doctorStartTiming.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true }) ||
-        selectedDateTime > doctorEndTiming.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: true })
+        selectedDateTime <
+          doctorStartTiming.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          }) ||
+        selectedDateTime >
+          doctorEndTiming.toLocaleTimeString("en-US", {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: true,
+          })
       ) {
         toast.info(
           "Selected time is not within the doctor's available timings."
@@ -97,21 +108,22 @@ function BookAppointment() {
         return;
       }
 
+      const reqBody = {
+        doctorInfo: {
+          userId: doctor.userId,
+          name: `${doctor.firstName} ${doctor.lastName}`,
+          email: doctor.email,
+          phone: doctor.phone,
+        },
+        doctorId: doctor._id,
+        userInfo: { name: user.name, email: user.email },
+        userId: user._id,
+        date: selectedDate.format("DD-MM-YYYY"),
+        time: selectedTime.format("HH:mm"),
+      };
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/user/book-appointment`,
-        {
-          doctorInfo: {
-            userId: doctor.userId,
-            name: `${doctor.firstName} ${doctor.lastName}`,
-            email: doctor.email,
-            phone:doctor.phone,
-          },
-          doctorId: doctor._id,
-          userInfo: { name: user.name, email: user.email },
-          userId: user._id,
-          date: selectedDate.format("DD-MM-YYYY"),
-          time: selectedTime.format("HH:mm A"),
-        },
+        reqBody,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -154,17 +166,20 @@ function BookAppointment() {
           <p>Address: {doctor.address}</p>
           <DatePicker
             className="form-control mt-2"
+            format="DD-MM-YYYY"
             onChange={(date) => {
-              setSelectedDate(date);
-              handelChangeData(date);
+              // setSelectedDate(moment(date).format("DD-MM-YYYY"));
+              setSelectedDate(date)
+              handelChangeData();
             }}
           />
           <TimePicker
             format="HH:mm A"
             className="form-control mt-2"
             onChange={(time) => {
-              setSelectedTime(time);
-              handelChangeData(time);
+              // setSelectedTime(moment(time).format("HH:mm"));
+              setSelectedTime(time)
+              handelChangeData();
             }}
           />
           {!isAvailable ? (

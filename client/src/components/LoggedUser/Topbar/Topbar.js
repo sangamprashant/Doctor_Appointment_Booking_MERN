@@ -12,7 +12,7 @@ function Topbar({ user, isSidebarOpen, setIsSidebarOpen }) {
   };
 
   return (
-    <div className="border w-100 p-3 rounded-2">
+    <div className="border w-100 p-3 rounded-2 bg-white">
       <div className="d-flex  justify-content-between">
         <Button onClick={toggleSidebar} className=" text-dark">
           {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}

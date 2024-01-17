@@ -1,29 +1,34 @@
 import React from "react";
 import HeroCss from "./Hero.module.css";
+import { HomeIcon } from "../../assets";
+import { Link } from "react-router-dom";
 
 function Hero() {
   return (
     <div className={HeroCss.mainContainer}>
       <section className="hero">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-6">
-              <div className="hero-content">
-                <h1 className="display-4">Welcome to BOOTSTRAPFINDS</h1>
+          <div className="row align-items-center">
+            <div className="col-lg-6 ">
+              <div className=" ">
+                <h1 className="display-4">Welcome to HealthConnect</h1>
                 <p className="lead">
-                  Discover a wide range of pre-made Bootstrap components and
-                  code snippets at BOOTSTRAPFINDS. Streamline your web
-                  development with our collection of ready-to-use, responsive
-                  design elements.
+                  Your one-stop platform for managing health appointments and
+                  services. Explore a variety of features, from booking
+                  appointments as a user to registering and applying as a doctor
+                  to serve your community.
                 </p>
-                <a href="#" className="btn btn-outline-secondary btn-lg">
+                <Link
+                  to="/register"
+                  className="btn btn-outline-secondary btn-lg"
+                >
                   Get Started
-                </a>
+                </Link>
               </div>
             </div>
-            <div className="col-lg-6 d-flex justify-content-center">
+            <div className="col-lg-6 d-flex justify-content-center flex-grow-1">
               <img
-                src="https://www.bootstrapfinds.tech/logo.png"
+                src={HomeIcon}
                 height="400"
                 width="400"
                 alt="Hero Image"

@@ -7,7 +7,7 @@ import { AppContext } from "../../../AppContext";
 
 function DoctorAppointments() {
   const [appointments, setAppointments] = useState([]);
-  const { token, setToken, isLogged, setIsLogged, user } =
+  const { token, setToken, isLogged, setIsLogged, user,setIsLoading } =
     useContext(AppContext);
 
   useEffect(() => {
@@ -18,6 +18,7 @@ function DoctorAppointments() {
 
   const fetchAppointments = async () => {
     try {
+      setIsLoading(true)
       const response = await axios.get(
         `${process.env.REACT_APP_BASE_URL}/api/doctor/doctor-appointments`,
         {
@@ -29,11 +30,14 @@ function DoctorAppointments() {
       setAppointments(response.data.data);
     } catch (error) {
       console.error("Failed to fetch the appointments", error);
+    }finally{
+      setIsLoading(false)
     }
   };
 
   const handleStatus = async (appointmentsId, status) => {
     try {
+      setIsLoading(true)
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/doctor/update-status`,
         {
@@ -55,6 +59,8 @@ function DoctorAppointments() {
       }
     } catch (error) {
       console.error("Error approving appointment", error);
+    }finally{
+      setIsLoading(false)
     }
   };
 
