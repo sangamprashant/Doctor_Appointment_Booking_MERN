@@ -6,6 +6,8 @@ import {
   Appointments,
   BookAppointment,
   DoctorApply,
+  DoctorAppointment,
+  DoctorUpdate,
   Footer,
   Home,
   LoggedHome,
@@ -56,12 +58,17 @@ function App() {
       ) : (
         <Sidebar>
           <Routes>
+            {/* common */}
             <Route path="/" element={<LoggedHome />} />
+            <Route path="/notification" element={<Notifications />} />
+            {/* user */}
             <Route path="/apply-doctor" element={<DoctorApply />} />
-            <Route path="/notifications" element={<Notifications />} />
             <Route path="/appointments" element={<Appointments />} />
             <Route path="/book-appointment/:id" element={<BookAppointment />} />
-
+            {/* doctor */}
+            <Route path="/user/appointments" element={<DoctorAppointment />} />
+            <Route path="/doctor/profile/:id" element={<DoctorUpdate />} />
+            {/* admin */}
             <Route path="/admin/doctors" element={<AdminDoctors />} />
             <Route path="/admin/users" element={<AdminUsers />} />
           </Routes>

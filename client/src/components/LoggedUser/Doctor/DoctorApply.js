@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, TimePicker } from "antd";
 import FormItem from "antd/es/form/FormItem";
-import "./DoctorApply.css"
+import "./DoctorApply.css";
 import { AppContext } from "../../../AppContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import moment from "moment";
+import dayjs from "dayjs";
 
-function DoctorApply() {
+function DoctorApply({ DoctorData }) {
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,7 +21,13 @@ function DoctorApply() {
     timings: [],
   });
   const { token, setToken, isLogged, setIsLogged, user } =
-  useContext(AppContext);
+    useContext(AppContext);
+
+  useEffect(() => {
+    if (DoctorData) {
+      setFormData(DoctorData);
+    }
+  }, [DoctorData]);
 
   const handleFormChange = (name, value) => {
     setFormData((prevData) => ({
@@ -55,37 +63,44 @@ function DoctorApply() {
       toast.info("Please fill in all fields.");
       return;
     }
-    console.log(formData);
+    // Conditionally set the API endpoint based on DoctorData
+    const api = DoctorData
+      ? "/api/doctor/updateProfile"
+      : "/api/user/apply-doctor";
+
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/api/user/apply-doctor`,
-         {...formData,
-          userId:user._id,
-          email:user.email,
-        } ,
+        `${process.env.REACT_APP_BASE_URL}${api}`,
+        { ...formData, userId: user._id, email: user.email },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
-      console.log(response.data);
-  
+
       if (response.data.success) {
-        toast.success(response.data.message)
+        toast.success(response.data.message);
       } else {
-        toast.info(response.data.message)
+        toast.info(response.data.message);
       }
     } catch (error) {
-      console.log("Error while fetching the user data:",error)
-      toast.error("Something went wrong")
+      console.log("Error while fetching the user data:", error);
+      toast.error("Something went wrong");
     }
-
-
   };
+
+  const convertToHHMM = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   return (
     <div>
-      <h1>Apply Doctor</h1>
+      <h1>{DoctorData ? "Update Doctor" : "Apply Doctor"}</h1>
       <hr />
       <h3 className="apply-sub-title">Personal Information</h3>
       <form onSubmit={handleSubmit}>
@@ -196,11 +211,21 @@ function DoctorApply() {
             />
           </div>
           <div className="col-md-4">
-            <label htmlFor="timings">Timings</label>
+            <label htmlFor="timings">Old-Timings</label>
+            <input
+              className="form-control"
+              disabled
+              value={formData.timings
+                .map((time) => convertToHHMM(time))
+                .join(", ")}
+            />
+          </div>
+          <div className="col-md-4">
+            <label htmlFor="timings">New-Timings</label>
             <TimePicker.RangePicker
               className="w-100"
               onChange={handleTimingChange}
-              format='HH:mm'
+              format="HH:mm"
             />
           </div>
         </div>

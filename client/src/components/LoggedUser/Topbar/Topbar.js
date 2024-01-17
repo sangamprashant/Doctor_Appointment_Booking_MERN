@@ -18,7 +18,7 @@ function Topbar({ user, isSidebarOpen, setIsSidebarOpen }) {
           {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
         </Button>
         <div className="d-flex align-items-center justify-content-end">
-          <Link className="mx-4 text-black" to="/notifications">
+          <Link className="mx-4 text-black" to="/notification">
             <NotificationsIcon />
             {user && user?.notifcation?.length > 0 && (
               <sup

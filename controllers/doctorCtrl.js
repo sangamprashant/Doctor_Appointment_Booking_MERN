@@ -94,7 +94,7 @@ const updateStatusController = async (req, res) => {
     notifcation.push({
       type: "status-updated",
       message: `your appointment has been updated ${status}`,
-      onClickPath: "/doctor-appointments",
+      onClickPath: "/appointments",
     });
     await user.save();
     res.status(200).send({
